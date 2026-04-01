@@ -130,93 +130,73 @@ from src.analysis import bifurcation_analysis
 
 # Analyze with respect to beta0
 results = bifurcation_analysis('beta0', 0.1, 1.2, n_points=30)
-📊 Model Description
-State Variables
-Variable	Description
-R
-i
-R 
-i
-​
- 	Renewable resource density in Patch 
-i
-i
-S
-i
-S 
-i
-​
- 	Cooperators (sustainable users) in Patch 
-i
-i
-C
-i
-C 
-i
-​
- 	Corruptors (unsustainable exploiters) in Patch 
-i
-i
-I
-i
-I 
-i
-​
- 	Enforcers (suppressors) in Patch 
-i
-i
-Parameters
-Parameter	Description	Typical Range
-r
-r	Resource growth rate	0.1–1.0
-K
-K	Resource carrying capacity	50–200
-α
-S
-α 
-S
-​
- 	Cooperator consumption rate	0.005–0.02
-α
-C
-α 
-C
-​
- 	Corruptor consumption rate	0.02–0.05
-α
-I
-α 
-I
-​
- 	Enforcer consumption rate	0.005–0.02
-β
-0
-β 
-0
-​
- 	Baseline transmission rate	0.1–0.8
-γ
-γ	Enforcement rate	0.05–0.3
-μ
-S
-,
-μ
-C
-,
-μ
-I
-μ 
-S
-​
- ,μ 
-C
-​
- ,μ 
-I
-​
- 	Mortality rates	0.05–0.15
-ν
-ν	Migration rate	0–0.1
+
+## 📊 Model Description
+
+### State Variables
+
+| Variable | Description |
+|----------|-------------|
+| \( R_i(t) \) | Density of the renewable resource in Patch \( i \) |
+| \( S_i(t) \) | Density of Cooperators (sustainable users) in Patch \( i \) |
+| \( C_i(t) \) | Density of Corruptors (unsustainable exploiters) in Patch \( i \) |
+| \( I_i(t) \) | Density of Immunes/Enforcers (suppressors) in Patch \( i \) |
+
+### Parameters
+
+| Parameter | Description | Units | Typical Range |
+|-----------|-------------|-------|---------------|
+| \( r \) | Intrinsic growth rate of the resource | time\(^{-1}\) | 0.1–1.0 |
+| \( K \) | Carrying capacity of the resource | resource density | 50–200 |
+| \( \alpha_S \) | Resource consumption rate for Cooperators | (resource·individual)\(^{-1}\) time\(^{-1}\) | 0.005–0.02 |
+| \( \alpha_C \) | Resource consumption rate for Corruptors | (resource·individual)\(^{-1}\) time\(^{-1}\) | 0.02–0.05 |
+| \( \alpha_I \) | Resource consumption rate for Enforcers | (resource·individual)\(^{-1}\) time\(^{-1}\) | 0.005–0.02 |
+| \( \beta_0 \) | Baseline transmission rate of corruption | (individual)\(^{-1}\) time\(^{-1}\) | 0.1–0.8 |
+| \( \gamma \) | Suppression rate of Corruptors by Enforcers | (individual)\(^{-1}\) time\(^{-1}\) | 0.05–0.3 |
+| \( \mu_S \) | Mortality rate of Cooperators | time\(^{-1}\) | 0.05–0.15 |
+| \( \mu_C \) | Mortality rate of Corruptors | time\(^{-1}\) | 0.05–0.15 |
+| \( \mu_I \) | Mortality rate of Enforcers | time\(^{-1}\) | 0.05–0.15 |
+| \( \nu \) | Migration rate between patches | time\(^{-1}\) | 0–0.1 |
+
+### Governing Equations
+
+**Patch 1:**
+\[
+\begin{aligned}
+\frac{dR_1}{dt} &= r R_1\left(1 - \frac{R_1}{K}\right) - R_1(\alpha_S S_1 + \alpha_C C_1 + \alpha_I I_1), \\[4pt]
+\frac{dS_1}{dt} &= S_1(\alpha_S R_1 - \mu_S) - \frac{\beta_0 C_1 S_1}{1 + R_1} + \nu(S_2 - S_1), \\[4pt]
+\frac{dC_1}{dt} &= C_1(\alpha_C R_1 - \mu_C) + \frac{\beta_0 C_1 S_1}{1 + R_1} - \gamma C_1 I_1 + \nu(C_2 - C_1), \\[4pt]
+\frac{dI_1}{dt} &= I_1(\alpha_I R_1 - \mu_I) + \gamma C_1 I_1 + \nu(I_2 - I_1).
+\end{aligned}
+\]
+
+**Patch 2:**
+\[
+\begin{aligned}
+\frac{dR_2}{dt} &= r R_2\left(1 - \frac{R_2}{K}\right) - R_2(\alpha_S S_2 + \alpha_C C_2 + \alpha_I I_2), \\[4pt]
+\frac{dS_2}{dt} &= S_2(\alpha_S R_2 - \mu_S) - \frac{\beta_0 C_2 S_2}{1 + R_2} + \nu(S_1 - S_2), \\[4pt]
+\frac{dC_2}{dt} &= C_2(\alpha_C R_2 - \mu_C) + \frac{\beta_0 C_2 S_2}{1 + R_2} - \gamma C_2 I_2 + \nu(C_1 - C_2), \\[4pt]
+\frac{dI_2}{dt} &= I_2(\alpha_I R_2 - \mu_I) + \gamma C_2 I_2 + \nu(I_1 - I_2).
+\end{aligned}
+\]
+
+### Basic Reproduction Number
+
+For an isolated patch, the basic reproduction number is:
+
+\[
+R_0^{\text{isolated}} = \frac{ \alpha_C R^* + \frac{\beta_0 S^*}{1 + R^*} }{ \mu_C },
+\]
+
+where \( R^* = \mu_S / \alpha_S \) and \( S^* = \frac{r}{\alpha_S}\left(1 - \frac{\mu_S}{\alpha_S K}\right) \).
+
+For the coupled two-patch system with symmetric migration, the system-level reproduction number is:
+
+\[
+\mathbb{R}_0 = \frac{ \alpha_C R^* + \frac{\beta_0 S^*}{1 + R^*} }{ \mu_C } = R_0^{\text{isolated}}.
+\]
+
+This demonstrates that symmetric migration does not alter the invasion threshold.
 📈 Results Reproduction
 All numerical results presented in the manuscript can be reproduced using the provided code:
 
