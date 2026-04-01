@@ -67,41 +67,31 @@ from src.analysis import compute_R0
 R0 = compute_R0(params)
 print(f"R0 = {R0:.3f}")  # Output: 1.524
 python scripts/generate_figures.py
-📊 Model Description
-State Variables
-Variable	Description
-R
-i
-R 
-i
-​
- 	Resource density in Patch 
-i
-i
-S
-i
-S 
-i
-​
- 	Cooperators in Patch 
-i
-i
-C
-i
-C 
-i
-​
- 	Corruptors in Patch 
-i
-i
-I
-i
-I 
-i
-​
- 	Enforcers in Patch 
-i
-i
+## 📊 Model Description
+
+### State Variables
+
+| Variable | Description |
+|----------|-------------|
+| \( R_i \) | Resource density in Patch \( i \) |
+| \( S_i \) | Cooperators in Patch \( i \) |
+| \( C_i \) | Corruptors in Patch \( i \) |
+| \( I_i \) | Enforcers in Patch \( i \) |
+
+### Parameters
+
+| Parameter | Description | Typical Range |
+|-----------|-------------|---------------|
+| \( r \) | Resource growth rate | 0.1–1.0 |
+| \( K \) | Carrying capacity | 50–200 |
+| \( \alpha_S \) | Cooperator consumption rate | 0.005–0.02 |
+| \( \alpha_C \) | Corruptor consumption rate | 0.02–0.05 |
+| \( \alpha_I \) | Enforcer consumption rate | 0.005–0.02 |
+| \( \beta_0 \) | Baseline transmission rate | 0.1–0.8 |
+| \( \gamma \) | Enforcement rate | 0.05–0.3 |
+| \( \mu_S, \mu_C, \mu_I \) | Mortality rates | 0.05–0.15 |
+| \( \nu \) | Migration rate | 0–0.1 |
+
 Parameters
 Parameter	Description	Typical Range
 r
