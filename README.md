@@ -31,13 +31,7 @@ Spatial connectivity via symmetric migration between two patches
 Key Features
 Full ODE system implementation for two-patch dynamics
 
-Computation of basic reproduction number 
-R
-0
-R 
-0
-​
- 
+Computation of basic reproduction number R0
 
 Bifurcation analysis with respect to transmission and enforcement parameters
 
